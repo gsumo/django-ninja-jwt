@@ -40,6 +40,7 @@ class TokenVerificationController(ControllerBase):
         "/verify",
         response={200: Schema},
         url_name="token_verify",
+        operation_id="verify_token"
     )
     def verify_token(self, token: schema.verify_schema):
         return token.to_response_schema()
@@ -52,6 +53,7 @@ class TokenBlackListController(ControllerBase):
         "/blacklist",
         response={200: Schema},
         url_name="token_blacklist",
+        operation_id="token_blacklist"
     )
     def blacklist_token(self, refresh: schema.blacklist_schema):
         return refresh.to_response_schema()
@@ -64,6 +66,7 @@ class TokenObtainPairController(ControllerBase):
         "/pair",
         response=schema.obtain_pair_schema.get_response_schema(),
         url_name="token_obtain_pair",
+        operation_id="pair_token"
     )
     def obtain_token(self, user_token: schema.obtain_pair_schema):
         user_token.check_user_authentication_rule()
@@ -73,6 +76,7 @@ class TokenObtainPairController(ControllerBase):
         "/refresh",
         response=schema.obtain_pair_refresh_schema.get_response_schema(),
         url_name="token_refresh",
+        operation_id="refresh_token"
     )
     def refresh_token(self, refresh_token: schema.obtain_pair_refresh_schema):
         return refresh_token.to_response_schema()
@@ -85,6 +89,7 @@ class TokenObtainSlidingController(TokenObtainPairController):
         "/sliding",
         response=schema.obtain_sliding_schema.get_response_schema(),
         url_name="token_obtain_sliding",
+        operation_id="sliding_token"
     )
     def obtain_token(self, user_token: schema.obtain_sliding_schema):
         user_token.check_user_authentication_rule()
@@ -94,6 +99,7 @@ class TokenObtainSlidingController(TokenObtainPairController):
         "/sliding/refresh",
         response=schema.obtain_sliding_refresh_schema.get_response_schema(),
         url_name="token_refresh_sliding",
+        operation_id="sliding_token_refresh"
     )
     def refresh_token(self, refresh_token: schema.obtain_sliding_refresh_schema):
         return refresh_token.to_response_schema()
@@ -155,6 +161,7 @@ if not django.VERSION < (3, 1):
             "/refresh",
             response=schema.obtain_pair_refresh_schema.get_response_schema(),
             url_name="token_refresh",
+            operation_id="async_token_refresh"
         )
         async def refresh_token(self, refresh_token: schema.obtain_pair_refresh_schema):
             refresh = await sync_to_async(refresh_token.to_response_schema)()
@@ -165,6 +172,7 @@ if not django.VERSION < (3, 1):
             "/sliding",
             response=schema.obtain_sliding_schema.get_response_schema(),
             url_name="token_obtain_sliding",
+            operation_id="async_sliding_token"
         )
         async def obtain_token(self, user_token: schema.obtain_sliding_schema):
             await sync_to_async(user_token.check_user_authentication_rule)()
@@ -174,6 +182,7 @@ if not django.VERSION < (3, 1):
             "/sliding/refresh",
             response=schema.obtain_sliding_refresh_schema.get_response_schema(),
             url_name="token_refresh_sliding",
+            operation_id="async_sliding_refresh"
         )
         async def refresh_token(
             self, refresh_token: schema.obtain_sliding_refresh_schema
